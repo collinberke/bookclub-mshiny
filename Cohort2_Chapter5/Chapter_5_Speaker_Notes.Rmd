@@ -1,0 +1,20 @@
+---
+title: "Chapter 5 Speaker Notes"
+output: html_notebook
+---
+
+# Workflow
+
+## Develop the Workflow
+
+### Creating your App
+
+I noticed during the reading, you create an app.R file in your favorite repository. The book has you type `shinyapp` and then select *Shift + Tab*. What is unique here is you get the bare bones Shiny app. It is much quicker then selecting **New File** or **New Project** and then hurtling through the **Shiny Web App**. Plus, you don't get all the bloat that would normally come through if you were to use R to generate the syntax.
+
+Since we are still learning here, feel welcome to select New Project and then Shiny Web App, or new File and Shiny Web App.
+
+Lastly, I noticed if you select *File -\> New File -\> Shiny Web App*, the Application option allows a creation of a single file or multiple files. I brought this topic up to our Cohort a couple of sessions ago. According to \* [Shiny - Two-file Shiny apps](%5B%3Chttps://shiny.rstudio.com/articles/two-file.html%3E)](<https://shiny.rstudio.com/articles/two-file.html>)):
+
+> If you have larger apps, you may find that having separate `ui.R` and `server.R` files makes your code easier to manage.
+
+So, I guess there is our answer. Now, before we cite websites...its always good to do a bit of research to make sure the comment isn't bogus! The author is \* [Dr. Mine Çetinkaya-Rundel -- Mine Çetinkaya-Rundel](%5Bhttp://www2.stat.duke.edu/~mc301/)](<http://www2.stat.duke.edu/~mc301/>)). Therefore, there is weight to the comment of single versus two file formats.
