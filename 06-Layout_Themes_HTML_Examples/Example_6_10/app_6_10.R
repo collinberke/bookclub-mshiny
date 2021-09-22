@@ -3,7 +3,7 @@ library(shiny)
 library(ggplot2)
 
 ui <- fluidPage(
-    theme = bslib::bs_theme(bootswatch = "darkly"),
+    theme = bslib::bs_theme(bootswatch = "cyborg"),
     titlePanel("A themed plot"),
     plotOutput("plot"),
 )
