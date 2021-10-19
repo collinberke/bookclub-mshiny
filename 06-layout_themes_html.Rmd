@@ -10,79 +10,84 @@ library(shiny)
 
 "Mastering Shiny" is a moving target.
 
-Much of the content for "Layout, themes, HTML" chapter was originally part of
-the "Basic UI" chapter.
+Much of the content for "Layout, themes, HTML" chapter was originally part of the "Basic UI" chapter.
 
 <!-- So I'm attempting to put a web-dev oriented spin on the material -->
 
-Hence, these notes have greater emphasis on low-level web concerns (html / css /
-bootstrap)
+Hence, these notes have greater emphasis on low-level web concerns (html / css / bootstrap)
 
 ## Learning objectives
 
-- Creating raw html using R
-- HTML elements: attributes, classes, content
-- CSS for styling
-- Bootstrap (and related) front end toolkits
-- Shiny produces single-page applications
-- ... but multipage _layouts_ are possible
+-   Creating raw html using R
+-   HTML elements: attributes, classes, content
+-   CSS for styling
+-   Bootstrap (and related) front end toolkits
+-   Shiny produces single-page applications
+-   ... but multipage *layouts* are possible
 
 ## Resources
 
 ### Websites
 
-- [Awesome Shiny Extensions](https://github.com/nanxstats/awesome-shiny-extensions)
-- [Shiny Application Layout Guide](https://shiny.rstudio.com/articles/layout-guide.html)
+-   [Awesome Shiny Extensions](https://github.com/nanxstats/awesome-shiny-extensions)
 
-- Mozilla Developer Network
-  - [Intro to HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML)
-  - [CSS First Steps](https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps)
-  - [Website parsing figure](https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps/How_CSS_works/rendering.svg)
+-   [Shiny Application Layout Guide](https://shiny.rstudio.com/articles/layout-guide.html)
+
+-   Mozilla Developer Network
+
+    -   [Intro to HTML](https://developer.mozilla.org/en-US/docs/Learn/HTML/Introduction_to_HTML)
+    -   [CSS First Steps](https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps)
+    -   [Website parsing figure](https://developer.mozilla.org/en-US/docs/Learn/CSS/First_steps/How_CSS_works/rendering.svg)
 
 ### Books
 
-- [Outstanding User Interfaces ...](https://unleash-shiny.rinterface.com)
-  - Especially Chapters 1, 5, 6, 7
+-   [Outstanding User Interfaces ...](https://unleash-shiny.rinterface.com)
+
+    -   Especially Chapters 1, 5, 6, 7
 
 ### Packages / Tools
 
-- [Bootstrap](https://getbootstrap.com/)
-- [Sass](https://sass-lang.com/)
+-   [Bootstrap](https://getbootstrap.com/)
 
-- R packages
-  - `{htmltools}` (for building raw html)
-  - `{sass}` (for building css using Sass rules; not mentioned in Wickham)
-  - `{bslib}` (handles working with bootstrap)
-  - `{thematic}` (matches plotting theme to app theme)
-  - `{shiny.semantic}` (formantic)
-  - `{shinyMobile}` (framework 7)
-  - `{shinymaterial}` (Material design)
-  - `{shinydashboard}` (for building dashboards)
+-   [Sass](https://sass-lang.com/)
+
+-   R packages
+
+    -   `{htmltools}` (for building raw html)
+    -   `{sass}` (for building css using Sass rules; not mentioned in Wickham)
+    -   `{bslib}` (handles working with bootstrap)
+    -   `{thematic}` (matches plotting theme to app theme)
+    -   `{shiny.semantic}` (formantic)
+    -   `{shinyMobile}` (framework 7)
+    -   `{shinymaterial}` (Material design)
+    -   `{shinydashboard}` (for building dashboards)
 
 ## Under the hood
 
 A typical web app:
 
-- In the browser (front-end):
-  - .html file defines the content
-  - .css files define the style
-  - javascript handles interactivity
+-   In the browser (front-end):
 
-- On the server (back-end):
-  - Requests received from the client
-  - R performs computations based on those requests
-  - Sends responses to the client
+    -   .html file defines the content
+    -   .css files define the style
+    -   javascript handles interactivity
+
+-   On the server (back-end):
+
+    -   Requests received from the client
+    -   R performs computations based on those requests
+    -   Sends responses to the client
 
 ### HTML - Hypertext markup language
 
 To view the .html for an app
 
-- Open an app in the browser or Rstudio
-- "View source" / "Inspect" / Open "Developer Tools"
+-   Open an app in the browser or Rstudio
+-   "View source" / "Inspect" / Open "Developer Tools"
 
 Typical .html structure:
 
-```html
+``` {.html}
 <!DOCTYPE html>
 <html>
   <head>
@@ -171,13 +176,13 @@ cat(
 
 CSS
 
-- isn't covered in the chapter (but links provided)
-- but underlies how bootstrap styles your shiny app
+-   isn't covered in the chapter (but links provided)
+-   but underlies how bootstrap styles your shiny app
 
 Much more detail at
 
-- [MDN](https://developer.mozilla.org/en-US/docs/Learn/CSS);
-- and in [Outstanding User Interfaces with Shiny](https://unleash-shiny.rinterface.com/beautify-css.html)
+-   [MDN](https://developer.mozilla.org/en-US/docs/Learn/CSS);
+-   and in [Outstanding User Interfaces with Shiny](https://unleash-shiny.rinterface.com/beautify-css.html)
 
 How does the browser display a site / app?
 
@@ -187,18 +192,18 @@ How does the browser display a site / app?
 
 A simple CSS file to set any text with "my-class" as class to red
 
-```css
+``` {.css}
 /* ./examples/06-layout_themes_html-css_example/www/style.css */
 .my-class {
   color: red
 }
 ```
 
-- Put static files (javascript / css) in the `./www` subdirectory of your app
-- Include your files using `tags$link` when defining the UI
-- Note: the path in the link should be "style.css" not "www/style.css"
+-   Put static files (javascript / css) in the `./www` subdirectory of your app
+-   Include your files using `tags$link` when defining the UI
+-   Note: the path in the link should be "style.css" not "www/style.css"
 
-```r
+``` {.r}
 # ./examples/06-layout_themes_html-css_example/app.R
 library(shiny)
 
@@ -214,10 +219,10 @@ shinyApp(ui, server)
 
 You can write custom rules to style based on
 
-- html element (`p`, `h1`, ...),
-- attributes
-- IDs 
-- and on interactive things (eg, when the mouse hovers)
+-   html element (`p`, `h1`, ...),
+-   attributes
+-   IDs
+-   and on interactive things (eg, when the mouse hovers)
 
 ## Bootstrap & Themes
 
@@ -232,15 +237,21 @@ Here's the strapline for bootstrap:
 
 What does that mean?
 
-- Responsive
-  - The page alters layout / appearance for different screen widths
-- Sass variables and mixins
-  - These are tools that reduce the amount of repetition when writing CSS
-- Prebuilt components
-  - You don't have to write your own button, navbar, etc ... classes from
-  scratch
-- Javascript plugins
-  - eg, for using dropdowns
+-   Responsive
+
+    -   The page alters layout / appearance for different screen widths
+
+-   Sass variables and mixins
+
+    -   These are tools that reduce the amount of repetition when writing CSS
+
+-   Prebuilt components
+
+    -   You don't have to write your own button, navbar, etc ... classes from scratch
+
+-   Javascript plugins
+
+    -   eg, for using dropdowns
 
 So bootstrap solves lots of challenges for us
 
@@ -248,7 +259,7 @@ Use package `{bslib}` to work with bootstrap in R
 
 To modify themes:
 
-```r
+``` {.r}
 bslib::bs_theme(
   # colours in RGB
   bg = "#202123", # background
@@ -269,7 +280,7 @@ bslib::bs_theme(
 
 Or use `bootswatch` to pick a prebuilt theme:
 
-```r
+``` {.r}
 bslib::bs_theme(bootswatch = "sandstone")
 ```
 
@@ -294,8 +305,7 @@ cat(
 
 The Layouts section was moved from the Basic UI chapter with little change.
 
-Rather than go over them again, we'll rewrite a simple (single-page layout) app
-into something more complicated (and style it while we're at it)
+Rather than go over them again, we'll rewrite a simple (single-page layout) app into something more complicated (and style it while we're at it)
 
 See `./examples/06-layout_themes_html-single_to_multipage_app/`
 
@@ -313,24 +323,22 @@ Layout functions: `tabsetPanel`, `tabPanel`, `navlistPanel`, `navbarMenu`
 
 ## Case study
 
-This is one of the first shiny apps I wrote, it pulls data for a specific user
-from Stack Overflow, works out which "tags" they have received the most votes
-for, then plots those top tags in a word cloud.
+This is one of the first shiny apps I wrote, it pulls data for a specific user from Stack Overflow, works out which "tags" they have received the most votes for, then plots those top tags in a word cloud.
 
 ### The initial app (app-01.R)
 
 How might this app be improved?
 
-- Code
-  - `stackr` eagerly obtains data from stack overflow (maybe it should wait til
-  user has input a complete user ID)
+-   Code
 
-- UX
-  - Visual style is boring (maybe it should look more like stack overflow?)
-  - Could we input user name, rather than ID?
-  - Could we show the user-name / image, so the user knows they've copied in the
-  correct user ID
-  - Can we add some extra plots / tables and make a multipage layout
+    -   `stackr` eagerly obtains data from stack overflow (maybe it should wait til user has input a complete user ID)
+
+-   UX
+
+    -   Visual style is boring (maybe it should look more like stack overflow?)
+    -   Could we input user name, rather than ID?
+    -   Could we show the user-name / image, so the user knows they've copied in the correct user ID
+    -   Can we add some extra plots / tables and make a multipage layout
 
 ```{r, code=readLines("examples/06-layout_themes_html-single_to_multipage_app/app-01.R"), eval = FALSE}
 ```
@@ -339,20 +347,14 @@ How might this app be improved?
 
 Relative to the original app, we have:
 
-- introduced a new results table (containing the data obtained from
-  stack-overflow)
-- converted from a single-panel to a multi-panel layout (using `tabsetPanel`
-  and two `tabPanel`s)
-- attempted to use the stack-overflow colour scheme as part of the apps theme,
-  and also in the wordcloud colour scheme
+-   introduced a new results table (containing the data obtained from stack-overflow)
+-   converted from a single-panel to a multi-panel layout (using `tabsetPanel` and two `tabPanel`s)
+-   attempted to use the stack-overflow colour scheme as part of the apps theme, and also in the wordcloud colour scheme
 
-The stack overflow colour scheme was obtained by using the browser's developer
-tools (here using "Inspect" in chromium and looking at the "styles" section) on
-an open SO page.
+The stack overflow colour scheme was obtained by using the browser's developer tools (here using "Inspect" in chromium and looking at the "styles" section) on an open SO page.
 
 ```{r, code=readLines("examples/06-layout_themes_html-single_to_multipage_app/app-01.R"), eval = FALSE}
 ```
-
 
 ## Meeting Videos
 
@@ -361,37 +363,41 @@ an open SO page.
 `r knitr::include_url("https://www.youtube.com/embed/hriFSGeBa_Q")`
 
 <details>
-  <summary> Meeting chat log </summary>
-  
-```
-00:05:16	Maya Longhi:	Hello
-00:12:32	Russ Hyde:	Hi
-00:13:03	Russ Hyde:	I'm just checking my screen share looks OK. Could you tell me if you can read the text on my rstudio instance
-00:14:30	Russ Hyde:	Is the text too pale?
-00:14:46	Morgan Grovenburg:	No, I can read it
-00:14:53	Russ Hyde:	Thanks
-00:16:45	Morgan Grovenburg:	I couldn't figure out how to use `bslib::bs_theme_preview()`, will you be showing that today?
-00:17:50	Russ Hyde:	I can do if you like
-00:19:48	Morgan Grovenburg:	Yes, please! Really, I just need see code that runs it
-00:30:02	Layla Bouzoubaa:	@sham, There’s a JavaScript for R book!
-00:30:21	shamsuddeen:	Oh, yah Layla
-00:30:24	shamsuddeen:	Thanks
-00:30:31	Layla Bouzoubaa:	https://book.javascript-for-r.com/
-00:30:32	Morgan Grovenburg:	https://book.javascript-for-r.com/
-00:38:15	Federica G:	line has gone ?!
-00:38:26	Diamantis:	lost the sound but still can see the shared screen
-01:05:55	Layla Bouzoubaa:	Sham, Bootstrap is a framework that combines html/js/css that can customized
-01:06:06	shamsuddeen:	ok
-01:06:11	shamsuddeen:	Thanks Layla
-01:07:00	Layla Bouzoubaa:	Like the buttons and stuff in shiny are following bootstrap guidelines (ie the shape, look etc) but you can customize them
-01:07:12	shamsuddeen:	ok
-01:08:39	Layla Bouzoubaa:	I just discovered this book btw: https://engineering-shiny.org/ . Ch.18.3.3 talks about external css files that may clarify your question on adding “www/“, sham
-01:17:51	shamsuddeen:	Oh, Thanks Layla. I got it
-01:21:47	Federica G:	Thanks !
-01:22:27	shamsuddeen:	Thanks
-01:22:38	Morgan Grovenburg:	Thank you Russ!
-01:24:22	Anne Hoffrichter:	Thanks Russ!
-```
+
+<summary>
+
+Meeting chat log
+
+</summary>
+
+    00:05:16    Maya Longhi:    Hello
+    00:12:32    Russ Hyde:  Hi
+    00:13:03    Russ Hyde:  I'm just checking my screen share looks OK. Could you tell me if you can read the text on my rstudio instance
+    00:14:30    Russ Hyde:  Is the text too pale?
+    00:14:46    Morgan Grovenburg:  No, I can read it
+    00:14:53    Russ Hyde:  Thanks
+    00:16:45    Morgan Grovenburg:  I couldn't figure out how to use `bslib::bs_theme_preview()`, will you be showing that today?
+    00:17:50    Russ Hyde:  I can do if you like
+    00:19:48    Morgan Grovenburg:  Yes, please! Really, I just need see code that runs it
+    00:30:02    Layla Bouzoubaa:    @sham, There’s a JavaScript for R book!
+    00:30:21    shamsuddeen:    Oh, yah Layla
+    00:30:24    shamsuddeen:    Thanks
+    00:30:31    Layla Bouzoubaa:    https://book.javascript-for-r.com/
+    00:30:32    Morgan Grovenburg:  https://book.javascript-for-r.com/
+    00:38:15    Federica G: line has gone ?!
+    00:38:26    Diamantis:  lost the sound but still can see the shared screen
+    01:05:55    Layla Bouzoubaa:    Sham, Bootstrap is a framework that combines html/js/css that can customized
+    01:06:06    shamsuddeen:    ok
+    01:06:11    shamsuddeen:    Thanks Layla
+    01:07:00    Layla Bouzoubaa:    Like the buttons and stuff in shiny are following bootstrap guidelines (ie the shape, look etc) but you can customize them
+    01:07:12    shamsuddeen:    ok
+    01:08:39    Layla Bouzoubaa:    I just discovered this book btw: https://engineering-shiny.org/ . Ch.18.3.3 talks about external css files that may clarify your question on adding “www/“, sham
+    01:17:51    shamsuddeen:    Oh, Thanks Layla. I got it
+    01:21:47    Federica G: Thanks !
+    01:22:27    shamsuddeen:    Thanks
+    01:22:38    Morgan Grovenburg:  Thank you Russ!
+    01:24:22    Anne Hoffrichter:   Thanks Russ!
+
 </details>
 
 ### Cohort 2
@@ -399,8 +405,11 @@ an open SO page.
 `r knitr::include_url("https://www.youtube.com/embed/XXXX")`
 
 <details>
-  <summary> Meeting chat log </summary>
-  
-```
-```
+
+<summary>
+
+Meeting chat log
+
+</summary>
+
 </details>

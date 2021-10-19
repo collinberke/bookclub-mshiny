@@ -1,4 +1,4 @@
-# (PART\*) Getting started {.unnumbered}
+(PART\*) Getting started {.unnumbered}
 
 # Your first Shiny app
 

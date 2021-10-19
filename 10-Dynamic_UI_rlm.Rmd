@@ -1,0 +1,288 @@
+---
+title: "10-Dynamic_UI_rlm"
+author: "Ryan L. Metcalf"
+date: "10/6/2021"
+output: ioslides_presentation
+---
+
+# Dynamic UI
+
+- **Learning Objectives**
+  - Understand relationship of Dynamic UI and its relationship to Server
+  - Review and test three key techniques for creating Dynamic UI
+      - `update` family
+      - `tabsetPanel()`
+      - `uiOutput()`
+
+> NOTE: Use DynamicUI sparingly. It will make your code substantially more difficult to manage and entangle your controls. Use the simplest method possible.
+
+```{r setup}
+# Loading Packages
+library(shiny)
+library(dplyr, warn.conflicts = FALSE)
+```
+
+## Update Inputs
+- Each `textInput` function is paired with an *update function*
+- This update allows you to modify the control after it has been created.
+
+>See 10.1 Example
+
+- This is a different code sequence
+    - They all take the name of the input (as a string) as the `inputId` argument.
+    - These arguments modify the input constructor and can be modified AFTER creation.
+
+### Simple Uses
+Dynamic UI controls are a convenience for our users.
+ - It allows the user to feel more in the driver seat of your app
+
+Next example combines `actionButton()`, `observeEvent()`, and `updateSliderInput()`.
+
+>See 10.2 Example
+
+With a slight modification we allow the users to tweak the text of an action button
+
+>See 10.3 Example
+
+- Incorporating these minor features into your webapp is like styling...but from a control standpoint!
+
+### Hierarchical select boxes {#hierarchical-select}
+Ok, lets turn up the heat!!!!
+
+Hierarchical Select Boxes are a bit more complicated but can allow for a far more plesent user experience ESPECIALLY if you have large list of options for your user.
+
+```{r}
+sales <- vroom::vroom("~/Documents/GitHub/bookclub-mshiny/sales_data_sample.csv", col_types = list(), na = "")
+sales %>% 
+  select(TERRITORY, CUSTOMERNAME, ORDERNUMBER, everything()) %>%
+  arrange(ORDERNUMBER)
+```
+
+> See 10.4 Example
+
+-   Each territory contains customers.
+-   Each customer has multiple orders.
+-   Each order contains rows.
+
+User Interface:
+
+-   Select a territory to see all customers.
+-   Select a customer to see all orders.
+-   Select an order to see the underlying rows.
+
+1.  I create a reactive, `territory()`, that contains the rows from `sales` that match the selected territory.
+
+2.  Whenever `territory()` changes, I update the list of `choices` in the `input$customername` select box.
+
+3.  I create another reactive, `customer()`, that contains the rows from `territory()` that match the selected customer.
+
+4.  Whenever `customer()` changes, I update the list of `choices` in the `input$ordernumber` select box.
+
+5.  I display the selected orders in `output$data`.
+
+### Freezing reactive inputs
+Similar to the Hierarchical select boxes, there may be times where the user selected inputs will not provide an output or worse, cause a calculation error.
+
+```{r example for Hadley Freeze}
+ui <- fluidPage(
+  selectInput("dataset", "Choose a dataset", c("pressure", "cars")),
+  selectInput("column", "Choose column", character(0)),
+  verbatimTextOutput("summary")
+)
+server <- function(input, output, session) {
+  dataset <- reactive(get(input$dataset, "package:datasets"))
+  
+  observeEvent(input$dataset, {
+    updateSelectInput(inputId = "column", choices = names(dataset()))
+  })
+  
+  output$summary <- renderPrint({
+    summary(dataset()[[input$column]])
+  })
+}
+```
+
+Use Link for this example: [Hadley Freeze Example](https://hadley.shinyapps.io/ms-freeze/)
+
+The corrected *non-freezing* code example is below:
+
+```{r non-freezing Hadley Freeze Example}
+server <- function(input, output, session) {
+  dataset <- reactive(get(input$dataset, "package:datasets"))
+  
+  observeEvent(input$dataset, {
+    freezeReactiveValue(input, "column")
+    updateSelectInput(inputId = "column", choices = names(dataset()))
+  })
+  
+  output$summary <- renderPrint({
+    summary(dataset()[[input$column]])
+  })
+}
+```
+
+The addition of `freezeReactiveValue(input, "column")` in the above example allows time for the UI and Server to become in sync again. No need to "unfreeze".
+
+Best practice: use `freezeReactiveValue()` anytime you change user input values.
+
+> Use `freezeReactiveValue()` to tell all downstream calculations that na iput value is stale and that they should save their effort until its useful
+
+### Circular references
+Circular References = STACK OVERFLOW!!!! AHHHHHHHHHHHH........
+
+Infinite loops and circular references can be extremely costly on a server and worse, can be exploited to bring an entire server crashing down!
+
+> See Example 10.5
+
+### Inter-related inputs
+
+When combining some Dynamic UI calls, you may inadvertenly create a circular reference or just odd behavior for your user.
+
+[Hadley's Inter-related Temperature error](https://hadley.shinyapps.io/ms-temperature/)
+
+-   Set 120 F, then click the down arrow.
+-   F changes to 119, and C is updated to 48.
+-   48 C converts to 118 F, so F changes again to 118.
+-   Fortunately 118 F is still 48 C, so the updates stop there.
+
+### Exercises
+
+[Solutions](https://mastering-shiny-solutions.org/dynamic-ui.html)
+
+1. Complete the user interface below with a server function that updates `input$date` so that you can only select dates in `input$year`.
+
+```{r}
+ui <- fluidPage(
+  numericInput("year", "year", value = 2020),
+  dateInput("date", "date")
+)
+```
+
+2. Complete the user interface below with a server function that updates `input$county` choices based on `input$state`.
+    For an added challenge, also change the label from "County" to "Parish" for Louisiana and "Borough" for Alaska.
+
+```{r, messages = FALSE}
+library(openintro, warn.conflicts = FALSE)
+states <- unique(county$state)
+ui <- fluidPage(
+  selectInput("state", "State", choices = states),
+  selectInput("county", "County", choices = NULL)
+)
+```
+
+3. Complete the user interface below with a server function that updates `input$country` choices based on the `input$continent`.
+Use `output$data` to display all matching rows.
+
+```{r}
+library(gapminder)
+continents <- unique(gapminder$continent)
+ui <- fluidPage(
+  selectInput("continent", "Continent", choices = continents), 
+  selectInput("country", "Country", choices = NULL),
+  tableOutput("data")
+)
+```
+
+4.  Extend the previous app so that you can also choose to select all continents, and hence see all countries.
+
+> You'll need to add `"(All)"` to the list of choices, and then handle that specially when filtering.
+
+5.  What is at the heart of the problem described at <https://community.rstudio.com/t/29307>?
+
+## Dynamic visibility
+This next section describes how to selectively show and hide parts of the UI.
+
+>Note: I'm not a fan of considering this a *hack*. Not a good use of terms.
+
+There are two main points of this use:
+
+- Use tabset panel with hidden tabs.
+- Use updateTabsetPanel() to switch tabs from the server.
+
+> See Example 10.6
+
+### Conditional UI
+Before covering this topic...be cautions with any code that requires the language "Conditional". Much thought must be placed on its use and deployment.
+
+Imagine that you want an app that allows the user to simulate from the normal, uniform, and exponential distributions. Each distribution has differnet parameters. The following example provides highlights this ability.
+
+> See Example 10.7
+
+> Note that I've carefully matched the `choices` in `input$dist` to the names of the tab panels. That makes it easy to write the `observeEvent()` code below that automatically switches controls when the distribution changes.
+
+### Wizard interface {#dynamic-wizard}
+You can also use this idea to create a “wizard”, a type of interface that makes it easier to collect a bunch of information by spreading it across multiple pages.
+
+### Exercises
+
+[Solutions](https://mastering-shiny-solutions.org/dynamic-ui.html)
+
+1. Use a hidden tabset to show additional controls only if the user checks an "advanced" check box.
+
+2. Create an app that plots `ggplot(diamonds, aes(carat))` but allows the user to choose which geom to use: `geom_histogram()`, `geom_freqpoly()`, or `geom_density()`. Use a hidden tabset to allow the user to select different arguments depending on the geom: `geom_histogram()` and `geom_freqpoly()` have a binwidth argument; `geom_density()` has a `bw` argument.
+
+3. Modify the app you created in the previous exercise to allow the user to choose whether each geom is shown or not (i.e. instead of always using one geom, they can picked 0, 1, 2, or 3). Make sure that you can control the binwidth of the histogram and frequency polygon independently.
+
+> **Hand Over to Collin**
+
+## Creating UI with code {#programming-ui}
+### Getting started {#dynamic-basics}
+### Multiple controls {#multiple-controls}
+### Dynamic filtering {#dynamic-filter}
+### Dialog boxes
+### Exercises
+
+[Solutions](https://mastering-shiny-solutions.org/dynamic-ui.html)
+
+1. Take this very simple app based on the initial example in the section:
+
+```{r}
+ui <- fluidPage(
+  selectInput("type", "type", c("slider", "numeric")),
+  uiOutput("numeric")
+)
+server <- function(input, output, session) {
+  output$numeric <- renderUI({
+    if (input$type == "slider") {
+      sliderInput("n", "n", value = 0, min = 0, max = 100)
+    } else {
+      numericInput("n", "n", value = 0, min = 0, max = 100)  
+    }
+  })
+}
+```
+
+How could you instead implement it using dynamic visibility?
+If you implement dynamic visibility, how could you keep the values in sync when you change the controls?
+
+2. Explain how this app works.
+    Why does the password disappear when you click the enter password button a second time?
+
+```{r}
+ui <- fluidPage(
+  actionButton("go", "Enter password"),
+  textOutput("text")
+)
+server <- function(input, output, session) {
+  observeEvent(input$go, {
+    showModal(modalDialog(
+      passwordInput("password", NULL),
+      title = "Please enter your password"
+    ))
+  })
+  
+  output$text <- renderText({
+    if (!isTruthy(input$password)) {
+      "No password"
+    } else {
+      "Password entered"
+    }
+  })
+}
+```
+
+3. In the app in Section \@ref(dynamic-basics), what happens if you drop the `isolate()` from `value <- isolate(input$dynamic)`?
+
+4. Add support for date and date-time columns `make_ui()` and `filter_var()`.
+
+5. (Advanced) If you know the [S3 OOP](http://adv-r.hadley.nz/S3.html) system, consider how you could replace the `if` blocks in `make_ui()` and `filter_var()` with generic functions.
