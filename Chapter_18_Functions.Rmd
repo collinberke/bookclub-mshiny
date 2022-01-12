@@ -1,0 +1,179 @@
+# Chapter 18 Functions
+
+**Learning Objectives**
+  - Use functions to reduce duplications
+  - Use functions to aid in maintenance
+  - Use functions to make server debugging independent from reactivity
+  - Spread your large Shiny app across multiple R files
+  
+For a recap on functions, see: [Functions](https://r4ds.had.co.nz/functions.html)
+
+You need three attributes for a function:
+1. Name
+2. Arguments
+3. Body
+
+Quick Example:
+
+```{r, Ryan function example, eval=FALSE}
+Ryan <- function(FunctionName) {
+  rng <- range(FunctionName, na.rm = TRUE)
+  (FunctionName - rng[1]) / (rng[2] - rng[1])
+}
+
+Ryan(c(0, 5, 10))
+
+```
+  
+## File Organization
+
+ - In many instances, it is recommended to encapsulate your larger R files into one directory.
+   - For example `R/<nameoffunction>.R`
+ - Another option for smaller helper utilties can be written into one `R/util.r` file.
+ - A final option is to use `{golem}` as a package manager...as all function files are contained in one place!
+
+## UI Functions
+
+Duplicate Code Example:
+
+```{r, Unoptimized Slider Inputs, eval=FALSE}
+ui <- fluidRow(
+  sliderInput("alpha", "alpha", min = 0, max = 1, value = 0.5, step = 0.1),
+  sliderInput("beta",  "beta",  min = 0, max = 1, value = 0.5, step = 0.1),
+  sliderInput("gamma", "gamma", min = 0, max = 1, value = 0.5, step = 0.1),
+  sliderInput("delta", "delta", min = 0, max = 1, value = 0.5, step = 0.1)
+)
+```
+
+Instead, use the following:
+
+```{r, Slider Inputs, eval=FALSE}
+sliderInput01 <- function(id) {
+  sliderInput(id, label = id, min = 0, max = 1, value = 0.5, step = 0.1)
+}
+ui <- fluidRow(
+  sliderInput01("alpha"),
+  sliderInput01("beta"),
+  sliderInput01("gamma"),
+  sliderInput01("delta")
+)
+```
+
+There are two things going on here with these examples:
+ - By giving the function a name, you are able to pull it out of a larger context of code
+ - If you need to change the behavior of your function...you only need to access the function call, not the many times you use it. Think *Global* here.
+ 
+### Other Applications
+ - Compile functions into one repository to call again and again
+ - Better yet, put it into a package, and include the package to your Shiny app
+   - This insures the single for use of a process across multiple apps
+   
+### Functional Programming
+To continue the conversation...enter the `{purrr}` package
+
+Lets compile the previous slider example into even more looped form:
+
+```{r, Using PURRR, eval=FALSE}
+library(purrr)
+vars <- c("alpha", "beta", "gamma", "delta")
+sliders <- map(vars, sliderInput01)
+ui <- fluidRow(sliders)
+```
+**BIG THINGS GOING ON HERE!!!**
+ - By using PURRR and using the `map()` call, we are iterating through a list vector. NOTE the function call `sliderInput01` from above which in turn, populates the name of the sliderID.
+ - When calling `fluidRow()` it unpacks and makes every element a child of the container.
+ 
+### UI as Data
+You can use use input data (DataFrame, Tibble, CSV, JSON, Database) to control your UI elements
+
+```{r, Tibble of data, eval=FALSE}
+vars <- tibble::tribble(
+  ~ id,   ~ min, ~ max,
+  "alpha",     0,     1,
+  "beta",      0,    10,
+  "gamma",    -1,     1,
+  "delta",     0,     1,
+)
+```
+
+The key here is the argument names match the column names:
+
+```{r, Function using Tibble, eval=FALSE}
+mySliderInput <- function(id, label = id, min = 0, max = 1) {
+  sliderInput(id, label, min = min, max = max, value = 0.5, step = 0.1)
+}
+```
+
+Finally, we can use `{purrr}` to generate our UI inputs:
+
+```{r, Purrr inputs, eval=FALSE}
+sliders <- pmap(vars, mySliderInput)
+```
+
+## Server Functions
+If your reactive code is >10 lines, consider making it a non-reactive call
+ - Seperate reactivity calls to `server()` and complex code resides in the function.
+ - Without functions, it is hard to determine the inputs and outputs. Whereas Functions tell you exactly what the inputs are.
+ 
+### Reading Uploaded Data
+This is a great reactive example found on page 143 of [Mastering Shiny](https://mastering-shiny.org/).
+
+```{r, Reactive Example, eval=FALSE}
+server <- function(input, output, session) {
+  data <- reactive({
+    req(input$file)
+    
+    ext <- tools::file_ext(input$file$name)
+    switch(ext,
+      csv = vroom::vroom(input$file$datapath, delim = ","),
+      tsv = vroom::vroom(input$file$datapath, delim = "\t"),
+      validate("Invalid file; Please upload a .csv or .tsv file")
+    )
+  })
+  
+  output$head <- renderTable({
+    head(data(), input$n)
+  })
+}
+```
+
+To make this into a more optimal function, we can modify the code snippet and create a snippet instead:
+
+```{r, Optimized Server Read Data, eval=FALSE}
+load_file <- function(name, path) {
+  ext <- tools::file_ext(name)
+  switch(ext,
+    csv = vroom::vroom(path, delim = ","),
+    tsv = vroom::vroom(path, delim = "\t"),
+    validate("Invalid file; Please upload a .csv or .tsv file")
+  )
+}
+```
+
+A rule of thumb when working through reactive calls:
+- Avoid taking reactives as input or returning outputs
+ - Instead, pass values into arguments and assume the caller will return the result into a reactive if needed
+
+```{r, Full Optimized Read Data, eval=FALSE}
+server <- function(input, output, session) {
+  data <- reactive({
+    req(input$file)
+    load_file(input$file$name, input$file$datapath)
+  })
+  
+  output$head <- renderTable({
+    head(data(), input$n)
+  })
+}
+```
+This will also make the code easier to test when we get to chapter 21!
+
+### Internal Functions
+More formal discussion of last section
+
+[USE THIS LINK](https://mastering-shiny.org/scaling-functions.html#internal-functions)
+
+## Summary
+ - Seperating Reactive and NonReactive components of your Shiny App allows for easier maintenance, testing and debugging
+ - It allows you to see the big picture of the app
+ - A single drawback of functions...they are either UI or Server related. Once we get to Modules, we will see how to bridge UI and Server calls!
