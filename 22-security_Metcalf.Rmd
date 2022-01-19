@@ -1,0 +1,116 @@
+# Security
+
+>Note, my repo is a mess!!!! Please forgive my numbering sequence errors!
+
+**Learning Objectives**
+
+- Learn various methods to secure your Shiny App
+- Learn various techniques to protect sensitive data
+- Methods to protect Passwords
+- Prevent Maliscious code execution by excluding server-side evaluation
+
+Security is everyone's concern to include information security. As a Shiny Developer, it may be simple to sidestep security for the sake of getting something out the door. However, this thought is only one error to a larger problem within your development environment.
+
+When securing your app, there are two main things to protect:
+
+- Your Data: you want to make sure an attaker can't access any sensitive data
+- Your Computer's Resources: you want to make sure an attaker can't mine bitcoin (pone) or use your server as part of a spam farm (zombie server)
+
+You're role as a developer is to ensure security *within* your app.
+
+Citation: [R and Security, Collin Gillespie's 2019 useR! Talk](https://oreil.ly/BM159)
+
+>Note: Prerequisites for being a hacker:
+>1. Must wear a hoodie
+>2. Must use Green Text (you think you live in the Matrix and your user name is NEO)
+
+***Presentation reminder....Tell your Moodle Story***
+
+## Data
+Protecting your data is paramount!
+
+Specifically for this topic is passwords and API keys.
+
+1. Never write your username or password to a plain text script....ever....I mean, Never Ever!
+2. Exlude sensitive information from being version controlled (add to .gitignore)
+3. Never attempt user authentification rules yourself...even if you THINK you have everything covered, there will me vulnerabilities
+
+```{r, Vulnerable code, eval=FALSE}
+library(shiny)
+secrets <- list(
+  a = "John Doe",
+  b = "29-Feb-2000",
+  c = "123-456-7890", 
+  d = "0987-6543-2109-8765"
+)
+allowed <- c("a", "b")
+ui <- fluidPage(
+  selectInput("x", "x", choices = allowed),
+  textOutput("secret")
+)
+server <- function(input, output, session) {
+  output$secret <- renderText({
+    secrets[[input$x]]
+  })
+}
+
+shinyApp(ui = ui, server = server)
+```
+
+Presentation Notes: run `Shiny.setInputValue("x", "c")`
+
+To protect your code, modify the server function:
+
+```{r, Protected Server, eval = FALSE}
+server <- function(input, output, session) {
+  output$secret <- renderText({
+    req(input$x %in% allowed)
+    secrets[[input$x]]
+  })
+}
+```
+
+## Compute Resources
+
+- Functions using `parse()` or `eval()` should always be suspect as their use makes your app vulnerable.
+- Refrain from using `source()` for uploaded *.R* or `rmarkdown::render()` a *.Rmd* file. 
+
+Examples:
+
+- Model Formulas
+
+It's possible to construct a model that executes arbitrary R code:
+
+```{r, Model Formulas, eval = FALSE}
+    df <- data.frame(x = 1:5, y = runif(5))
+    mod <- lm(y ~ {print("Hi!"); x}, data = df)
+```
+
+- Glue Labels
+
+The glue package provides a powerful way to create strings from data:
+
+```{r, Glue Labels, eval = FALSE}
+    title <- "foo"
+    number <- 1
+    glue::glue("{title}-{number}")
+```
+
+But `glue()` evaluates anything inside of `{}`:
+
+```{r, Bad Glue, eval = FALSE}
+glue::glue("{title}-{print('Hi'); number}")
+```
+
+Use `glue::glue_safe()` instead
+
+- Variable Transformation
+
+```{r, Variable Transformation, eval = FALSE}
+find_student <- function(name) {
+  paste0("SELECT * FROM Students WHERE name = ('", name, "');")
+}
+find_student("Hadley")
+```
+
+> Youtube recommendation for [SQL injections](https://youtu.be/ciNHn38EyRc) from the browswer.
