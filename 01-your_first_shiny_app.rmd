@@ -1,6 +1,7 @@
 (PART\*) Getting started {.unnumbered}
 
 # Your first Shiny app
+Hello, this is an update to Cohort 3
 
 **Learning objectives:**
 
