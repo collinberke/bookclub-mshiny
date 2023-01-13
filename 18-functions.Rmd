@@ -251,11 +251,45 @@ There are two different approaches to allow the user to choose from a prespecifi
 
 ### Cohort 2
 
-`r knitr::include_url("https://www.youtube.com/embed/XXXX")`
+`r knitr::include_url("https://www.youtube.com/embed/aQHyWOEvJAI")`
 
 <details>
   <summary> Meeting chat log </summary>
   
 ```
+00:27:24	Kevin Gilds:	https://www.rostrum.blog/2021/04/14/gha-readme/
+00:27:42	Kevin Gilds:	Update README with Github actions
+00:51:26	collinberke:	https://www.youtube.com/watch?v=BEyiFVWaTtc&list=PL3x6DOfs2NGjtn1_4BSX99R5wrLjK7XvY&index=19
+00:51:35	collinberke:	https://www.youtube.com/watch?v=tWEa6JwlJ3c&list=PL3x6DOfs2NGjtn1_4BSX99R5wrLjK7XvY&index=21
 ```
 </details>
+
+`r knitr::include_url("https://www.youtube.com/embed/5YmZiyVgUeg")`
+
+
+### Cohort 3
+
+`r knitr::include_url("https://www.youtube.com/embed/U2vtBWwWUU8")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+00:15:32	FG:	https://engineering-shiny.org/
+00:29:21	Oluwafemi Oyedele:	ObserveEvent Respond to "event-like" reactive inputs, values, and expressions.
+00:32:12	Brendan Lam:	This was great, thanks!
+```
+</details>
+
+
+<!--
+### Cohort 4
+
+`r knitr::include_url("https://www.youtube.com/embed/URL")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+LOG
+```
+</details>
+-->

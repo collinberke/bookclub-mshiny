@@ -99,11 +99,39 @@ old_data %>% select(!!!old_nm)
 
 ### Cohort 2
 
-`r knitr::include_url("https://www.youtube.com/embed/XXXX")`
+`r knitr::include_url("https://www.youtube.com/embed/EGu10YO_Bn4")`
 
 <details>
   <summary> Meeting chat log </summary>
   
 ```
+01:11:18	Ryan Metcalf:	https://databank.worldbank.org/reports.aspx?source=global-economic-prospects
 ```
 </details>
+
+
+### Cohort 3
+
+`r knitr::include_url("https://www.youtube.com/embed/wrN7Xv85dWM")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+00:55:54	Federica Gazzelloni:	VROOM: https://www.rdocumentation.org/packages/vroom/versions/1.0.2/topics/vroom
+00:56:22	Federica Gazzelloni:	in practice: vroom: Read a delimited file into a tibble
+```
+</details>
+
+
+<!--
+### Cohort 4
+
+`r knitr::include_url("https://www.youtube.com/embed/URL")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+LOG
+```
+</details>
+-->

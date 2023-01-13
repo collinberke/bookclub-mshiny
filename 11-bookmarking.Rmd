@@ -190,11 +190,44 @@ The parameter in this instance is the `state_id` which corresponds to a director
 
 ### Cohort 2
 
-`r knitr::include_url("https://www.youtube.com/embed/XXXX")`
+`r knitr::include_url("https://www.youtube.com/embed/gB70zh1MkLk")`
 
 <details>
   <summary> Meeting chat log </summary>
   
 ```
+00:23:33	Conor Tompkins:	From the docs: “reduce() is an operation that combines the elements of a vector into a single value. The combination is driven by .f, a binary function that takes two values and returns a single value”
+01:09:29	Conor Tompkins:	https://www.rplumber.io/
+01:09:37	Conor Tompkins:	curl --data "a=4&b=3" "http://localhost:8000/sum"
+01:13:18	Conor Tompkins:	https://cran.r-project.org/web/packages/curl/index.html
+01:17:06	Conor Tompkins:	https://xkcd.com/327/
 ```
 </details>
+
+### Cohort 3
+
+`r knitr::include_url("https://www.youtube.com/embed/rBGzD4v9qhc")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+00:17:16	Brendan Lam:	https://shiny.rstudio.com/articles/advanced-bookmarking.html
+00:24:09	Ryan Metcalf:	https://www.man7.org/linux/man-pages/man8/cron.8.html
+00:25:07	Ryan Metcalf:	Keep in mind, this is only one solution for managing a web server using some type of “timing" service. The link is specific to a Linux server. There are alternatives from other hosting applications.
+00:29:51	Brendan Lam:	https://mastering-shiny-solutions.org/bookmarking.html
+```
+</details>
+
+
+<!--
+### Cohort 4
+
+`r knitr::include_url("https://www.youtube.com/embed/URL")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+LOG
+```
+</details>
+-->

@@ -1,8 +1,6 @@
-# Shiny - Basic User Interface
+# Basic UI
 
-## Learning objectives
-
-#### The Shiny *User Interface* consists of 3 components  {-} 
+**The Shiny *User Interface* consists of 3 components**
 
 1. **Inputs**   
     + Text, Numeric variables, Dates, Radio buttons/Check boxes, File uploads, Buttons  
@@ -28,7 +26,7 @@
 4. Shiny Cheat Sheet    
     - [https://shiny.rstudio.com/articles/cheatsheet.html](https://shiny.rstudio.com/articles/cheatsheet.html)
 
-## The Shiny Basic User Interface(ui)
+## The Shiny Basic User Interface (ui)
 
 - Recall, the simplest *Shiny* application has 2 components, **ui & server**
 
@@ -337,3 +335,29 @@ Chapter 3: *Basic UI* introduces the 3 components of user interface for Shiny
 00:59:03	Collin Berke:	Thanks, Ola
 ```
 </details>
+
+### Cohort 3
+
+`r knitr::include_url("https://www.youtube.com/embed/94zye7iYzPs")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+00:11:45	Ryan Metcalf:	https://appsilon.com/shiny-conference/
+01:09:37	Njoki Njuki Lucy:	I had the same question 😄
+```
+</details>
+
+
+<!--
+### Cohort 4
+
+`r knitr::include_url("https://www.youtube.com/embed/URL")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+LOG
+```
+</details>
+-->

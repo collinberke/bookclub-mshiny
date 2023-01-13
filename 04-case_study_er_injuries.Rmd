@@ -25,7 +25,7 @@ library(tidyverse)
 
 We're exploring data from the National Electronic Injury Surveillance System (NEISS), which covers **accidents reported from a sample of hospitals in the US**.
 
-For every accident / inured person we have
+For every accident / injured person we have
 
 - **date**,
 - **age**,
@@ -48,7 +48,7 @@ Code to download the data:
 dir.create("neiss")
 
 download <- function(name) {
-  url <- "https://github.com/hadley/mastering-shiny/raw/master/neiss/"
+  url <- "https://github.com/hadley/mastering-shiny/raw/main/neiss/"
   download.file(paste0(url, name), paste0("neiss/", name), quiet = TRUE)
 }
 
@@ -365,3 +365,29 @@ The resulting version of the app is available at https://hadley.shinyapps.io/ms-
 00:11:36	Ryan Metcalf:	https://www.infoworld.com/article/3516150/create-a-shiny-app-to-search-twitter-with-rtweet-and-r.amp.html
 ```
 </details>
+
+### Cohort 3
+
+`r knitr::include_url("https://www.youtube.com/embed/VCuaOLXLOZ4")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+00:15:13	Njoki Njuki Lucy:	I don't know yet but we can ask on the slack channel for more info!
+00:15:25	Njoki Njuki Lucy:	so far so good.
+```
+</details>
+
+
+<!--
+### Cohort 4
+
+`r knitr::include_url("https://www.youtube.com/embed/URL")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+LOG
+```
+</details>
+-->

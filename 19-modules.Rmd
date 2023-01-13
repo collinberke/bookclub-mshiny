@@ -1,4 +1,4 @@
-# Modules
+# Shiny modules
 
 Modules are a kind of miniature app within a larger app. They isolate a particular group of inputs and outputs. Just like fully Shiny apps they have a UI and a server part. Modules help you break your big, complex app into smaller parts. This makes your Shiny code more readable, easier to debug, and reuseable. This last is particularly interesting, since you can use the same module among many different projects. 
 
@@ -238,11 +238,41 @@ Two versions of a simple app based on Tidy Tuesday data:
 
 ### Cohort 2
 
-`r knitr::include_url("https://www.youtube.com/embed/XXXX")`
+`r knitr::include_url("https://www.youtube.com/embed/5YmZiyVgUeg")`
+
+`r knitr::include_url("https://www.youtube.com/embed/BTpK8lan97E")`
 
 <details>
   <summary> Meeting chat log </summary>
   
 ```
+00:43:20	Kevin Gilds:	https://github.com/bios2/shiny_volcano_golem
 ```
 </details>
+
+
+### Cohort 3
+
+`r knitr::include_url("https://www.youtube.com/embed/O1Fe_IHWcS0")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+00:52:06	Oluwafemi Oyedele:	https://shiny.rstudio.com/articles/modules.html
+00:52:25	Oluwafemi Oyedele:	https://engineering-shiny.org/structuring-project.html
+```
+</details>
+
+
+<!--
+### Cohort 4
+
+`r knitr::include_url("https://www.youtube.com/embed/URL")`
+
+<details>
+  <summary>Meeting chat log</summary>
+```
+LOG
+```
+</details>
+-->
